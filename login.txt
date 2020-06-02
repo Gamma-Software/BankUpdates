@@ -1,0 +1,6 @@
+email
+password
+client_id
+client_secret
+bankin_device
+bankin-version
