@@ -5,6 +5,7 @@ from exceptions import PostGetErrors
 def store_balance():
     f = open("login.txt", "r")
     [email, password, client_id, client_secret, bankin_device, bankin_version] = f.read().splitlines()
+    f.close()
 
     interface = BankinInterface(email, password, client_id, client_secret, bankin_device, bankin_version)
     try:
