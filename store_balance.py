@@ -1,5 +1,6 @@
 from bankin_interface import BankinInterface
 from exceptions import PostGetErrors
+import log
 
 
 def store_balance():
