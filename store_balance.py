@@ -1,5 +1,5 @@
-from getAccounts.bankin_interface import BankinInterface
-from getAccounts.exceptions import PostGetErrors
+from bankin_interface import BankinInterface
+from exceptions import PostGetErrors
 
 
 def store_balance():

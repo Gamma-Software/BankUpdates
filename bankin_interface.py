@@ -1,6 +1,6 @@
 import requests
 import time
-from getAccounts.exceptions import PostGetErrors
+from exceptions import PostGetErrors
 
 
 class BankinInterface:
