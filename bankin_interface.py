@@ -1,6 +1,7 @@
 import requests
 import time
-from getAccounts.exceptions import PostGetErrors
+from exceptions import PostGetErrors
+from log import log
 
 
 class BankinInterface:
@@ -26,7 +27,7 @@ class BankinInterface:
         self.item = {}
 
     def authenticate(self):
-        print("Authenticate")
+        log("Authenticate")
         response = requests.post(self.authenticate_url, headers=self.headers, params=self.params)
         if response.status_code != 200:
             raise PostGetErrors(response.status_code, "error raised on authenticate")
@@ -34,7 +35,7 @@ class BankinInterface:
         return self.check_bankin_account()
 
     def refresh_item(self, item_to_refresh):
-        print("Refresh bank account")
+        log("Refresh bank account")
         response = requests.post(self.items_url + item_to_refresh + '/refresh', headers=self.headers)
         if response.status_code != 200:
             raise PostGetErrors(response.status_code, "error raised on refreshing")
@@ -47,7 +48,7 @@ class BankinInterface:
             self.timeout -= 1
             if self.timeout <= 0:
                 return False
-        print("Bank accounts updated")
+        log("Bank accounts updated")
         return True
 
     def refresh_items(self, items_to_refresh):
@@ -68,7 +69,7 @@ class BankinInterface:
         return response.json()['resources']
 
     def get_items_balance(self):
-        print("Retrieved items balance")
+        log("Retrieved items balance")
         data = []
         for account in self.get_items_response_json():
             data_to_add = {}
@@ -80,13 +81,13 @@ class BankinInterface:
         return data
 
     def logout(self):
-        print("logout user")
+        log("logout user")
         response = requests.post(self.logout_url, headers=self.headers)
         if response.status_code != 200:
             raise PostGetErrors(response.status_code, "error raised on logout")
 
     def check_bankin_account(self):
-        print("check user")
+        log("check user")
         response = requests.get(self.settings_url, headers=self.headers)
         if response.status_code != 200:
             raise PostGetErrors(response.status_code, "error raised on checking the user's login")
