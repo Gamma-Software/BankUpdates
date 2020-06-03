@@ -1,25 +1,39 @@
-import xlsxwriter
 from getAccounts.bankin_interface import BankinInterface
 from getAccounts.exceptions import PostGetErrors
+import sys
 
-f = open("login.txt", "r")
-[email, password, client_id, client_secret, bankin_device, bankin_version] = f.read().splitlines()
 
-interface = BankinInterface(email, password, client_id, client_secret, bankin_device, bankin_version)
-try:
-    if interface.authenticate():
-        datas = interface.get_items_balance()
-        interface.logout()
-except PostGetErrors as error:
-    print("error: "+error.message)
+def usage():
+    print()
 
-workbook = xlsxwriter.Workbook('accounts.xlsx')
-worksheet = workbook.add_worksheet()
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "hg:d", ["help", "store_balance", "show_balance"])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+    for opt, arg in argv:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit()
+        elif opt in ("-st", "--store_balance"):
+            f = open("login.txt", "r")
+            [email, password, client_id, client_secret, bankin_device, bankin_version] = f.read().splitlines()
 
-for i, data in enumerate(datas):
-    worksheet.write(i, 0, data.get('id'))
-    worksheet.write(i, 1, data.get('name'))
-    worksheet.write(i, 2, data.get('balance'))
-    worksheet.write(i, 3, data.get('updated_at'))
+            interface = BankinInterface(email, password, client_id, client_secret, bankin_device, bankin_version)
+            try:
+                if interface.authenticate():
+                    datas = interface.get_items_balance()
+                    interface.logout()
+            except PostGetErrors as error:
+                print("error: " + error.message)
+        elif opt in ("-sh", "--show_balance"):
+            grammar = arg
+        else:
+            usage()
+            sys.exit(2)
 
-workbook.close()
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    main(sys.argv)
