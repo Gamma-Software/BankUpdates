@@ -71,15 +71,21 @@ class BankinInterface:
 
     def get_items_balance(self):
         log("Retrieved items balance")
-        data = []
+        account_name = []
+        id = []
+        balance = []
+        update_time = []
+        data = {}
+        dataframe_to_return = pd.DataFrame()
         for account in self.get_items_response_json():
-            data_to_add = {}
-            data_to_add.update({'id': account.get('item').get('id')})
-            data_to_add.update({'name': account.get('name')})
-            data_to_add.update({'balance': account.get('balance')})
-            data_to_add.update({'updated_at': account.get('updated_at')})
-            data.append(data_to_add)
-        return pd.from_dict(data)
+            #data_to_add = {account.get('name') + ': ' + str(account.get('item').get('id')):{}}
+            df = pd.DataFrame([{str(account.get('balance')):
+                              account.get('name') + ': ' + str(account.get('item').get('id')),
+                              'updated_at': pd.Timestamp(account.get('updated_at')).tz_localize(None)}])
+            dataframe_to_return.join(df)
+            print(dataframe_to_return)
+        # Clean dataframe
+        return dataframe_to_return
 
     def logout(self):
         log("logout user")
