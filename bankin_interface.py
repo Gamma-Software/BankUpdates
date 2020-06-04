@@ -12,16 +12,16 @@ class BankinInterface:
     logout_url = api_bankin_url+'logout'
     settings_url = api_bankin_url+'users/me/settings'
 
-    def __init__(self, email, password, client_id, client_secret, bankin_device, bankin_version):
+    def __init__(self, email, password, client_id, client_secret):
         self.params = (
-            ('email', email),
-            ('password', password),
+            ("email", email),
+            ("password", password),
         )
         self.headers = {
-            'Bankin-Version': bankin_version,
-            'bankin-device': bankin_device,
-            'Client-Id': client_id,
-            'Client-Secret': client_secret,
+            'bankin-version': '2019-02-18',
+            'bankin-device': '1304aa81-936b-4a9a-bb48-22cf94b9e679',
+            'client-id': client_id,
+            'client-secret': client_secret
         }
         self.timeout = 20
         self.item = {}
