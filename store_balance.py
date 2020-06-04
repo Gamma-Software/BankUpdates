@@ -1,5 +1,6 @@
 from getAccounts.bankin_interface import BankinInterface
 from getAccounts.exceptions import PostGetErrors
+from getAccounts.excel_interface import save_in_excel
 
 
 def store_balance():
@@ -14,8 +15,9 @@ def store_balance():
     interface = BankinInterface(email, password, client_id, client_secret)
     try:
         if interface.authenticate():
-            datas = interface.get_items_balance() # Get the latest balance of all the bankin accounts
+            data = interface.get_items_balance()  # Get the latest balance of all the bankin accounts
             interface.logout()
+            save_in_excel(data)
     except PostGetErrors as error:
         print("error: " + error.message)
 

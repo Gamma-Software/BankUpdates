@@ -2,6 +2,7 @@ import requests
 import time
 from getAccounts.exceptions import PostGetErrors
 from getAccounts.log import log
+import pandas as pd
 
 
 class BankinInterface:
@@ -78,7 +79,7 @@ class BankinInterface:
             data_to_add.update({'balance': account.get('balance')})
             data_to_add.update({'updated_at': account.get('updated_at')})
             data.append(data_to_add)
-        return data
+        return pd.from_dict(data)
 
     def logout(self):
         log("logout user")
