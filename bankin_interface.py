@@ -9,6 +9,7 @@ class BankinInterface:
     api_bankin_url = 'https://sync.bankin.com/v2/'
     authenticate_url = api_bankin_url+'authenticate'
     accounts_url = api_bankin_url+'accounts'
+    bank_url = api_bankin_url+'banks'
     items_url = api_bankin_url+'items'
     logout_url = api_bankin_url+'logout'
     settings_url = api_bankin_url+'users/me/settings'
