@@ -2,12 +2,14 @@ import requests
 import time
 from getAccounts.exceptions import PostGetErrors
 from getAccounts.log import log
+import json
 
 
 class BankinInterface:
     api_bankin_url = 'https://sync.bankin.com/v2/'
     authenticate_url = api_bankin_url+'authenticate'
     accounts_url = api_bankin_url+'accounts'
+    bank_url = api_bankin_url+'banks'
     items_url = api_bankin_url+'items'
     logout_url = api_bankin_url+'logout'
     settings_url = api_bankin_url+'users/me/settings'
@@ -27,6 +29,7 @@ class BankinInterface:
         self.item = {}
 
     def authenticate(self):
+        """ Authenticate the user"""
         log("Authenticate")
         response = requests.post(self.authenticate_url, headers=self.headers, params=self.params)
         if response.status_code != 200:
@@ -35,58 +38,79 @@ class BankinInterface:
         return self.check_bankin_account()
 
     def refresh_item(self, item_to_refresh):
-        log("Refresh bank account")
-        response = requests.post(self.items_url + item_to_refresh + '/refresh', headers=self.headers)
-        if response.status_code != 200:
+        """ Refresh the items"""
+        # Store the url
+        url = self.items_url + '/' + str(item_to_refresh) + '/refresh'
+
+        # Ask for item refresh
+        response = requests.post(url, headers=self.headers)
+        if response.status_code == 403:
+            print("No need to refresh")
+            return True
+        if response.status_code != 200 and response.status_code != 202:
             raise PostGetErrors(response.status_code, "error raised on refreshing")
-        response = requests.get(self.items_url + item_to_refresh + '/refresh/status', headers=self.headers)
+
+        # Check if the item is refreshed
+        response = requests.get(url + '/status', headers=self.headers)
+
+        # While the item is not refreshed check for its status every second for 20 seconds
         self.timeout = 20
-        while response.json()['status'] != 'finished':
-            response = requests.get(self.items_url + item_to_refresh + '/refresh/status', headers=self.headers)
+        refresh_status = json.loads(response.content.decode('utf-8'))['status']
+        while refresh_status != 'finished':
+            if refresh_status != 'finished_error':
+                print("No need to refresh")
+                return True
+
+            response = requests.get(url + '/status', headers=self.headers)
+            refresh_status = json.loads(response.content.decode('utf-8'))['status']
+
             print("Retrieving data from banks; timeout after " + str(self.timeout) + "s")
             time.sleep(1)
             self.timeout -= 1
             if self.timeout <= 0:
+                print("Retrieving data from banks; Timeout ! Please try to connect to your bankin account"
+                      " on the web and understand the issue")
                 return False
         log("Bank accounts updated")
         return True
 
     def refresh_items(self, items_to_refresh):
+        """ Refresh all the items"""
+        log("Refresh bank accounts")
         for item_to_refresh in items_to_refresh:
             if not self.refresh_item(item_to_refresh):
                 return False
         return True
 
     def get_items_ids(self):
-        self.item = {}
+        """ Get all the items ids"""
+        items_id = []
         for account in self.get_items_response_json():
-            self.item.update({'item': account.get('item').get('id')})
+            items_id.append(account.get('item').get('id'))
+        return items_id
 
     def get_items_response_json(self):
+        """ Get all the items response"""
         response = requests.get(self.accounts_url, headers=self.headers, params=(('limit', '200'),))
         if response.status_code != 200:
             raise PostGetErrors(response.status_code, "error raised on getting the items")
         return response.json()['resources']
 
     def get_items_balance(self):
+        """ Get all the items balance and store them in a useful DataFrame"""
         log("Retrieved items balance")
-        data = []
-        for account in self.get_items_response_json():
-            data_to_add = {}
-            data_to_add.update({'id': account.get('item').get('id')})
-            data_to_add.update({'name': account.get('name')})
-            data_to_add.update({'balance': account.get('balance')})
-            data_to_add.update({'updated_at': account.get('updated_at')})
-            data.append(data_to_add)
-        return data
+        items = self.get_items_response_json()
+        return items
 
     def logout(self):
+        """ Logout the user"""
         log("logout user")
         response = requests.post(self.logout_url, headers=self.headers)
         if response.status_code != 200:
             raise PostGetErrors(response.status_code, "error raised on logout")
 
     def check_bankin_account(self):
+        """ Check the validity of the user's email"""
         log("check user")
         response = requests.get(self.settings_url, headers=self.headers)
         if response.status_code != 200:
