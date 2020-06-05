@@ -44,6 +44,9 @@ class BankinInterface:
 
         # Ask for item refresh
         response = requests.post(url, headers=self.headers)
+        if response.status_code == 403:
+            print("No need to refresh")
+            return True
         if response.status_code != 200 and response.status_code != 202:
             raise PostGetErrors(response.status_code, "error raised on refreshing")
 
