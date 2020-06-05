@@ -56,8 +56,12 @@ class BankinInterface:
         # While the item is not refreshed check for its status every second for 20 seconds
         self.timeout = 20
         refresh_status = json.loads(response.content.decode('utf-8'))['status']
-        while refresh_status != 'finished' or refresh_status != 'finished_error':
-            response = requests.get(url, headers=self.headers)
+        while refresh_status != 'finished':
+            if refresh_status != 'finished_error':
+                print("No need to refresh")
+                return False
+
+            response = requests.get(url + '/status', headers=self.headers)
             refresh_status = json.loads(response.content.decode('utf-8'))['status']
 
             print("Retrieving data from banks; timeout after " + str(self.timeout) + "s")
