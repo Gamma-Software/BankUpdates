@@ -59,7 +59,7 @@ class BankinInterface:
         while refresh_status != 'finished':
             if refresh_status != 'finished_error':
                 print("No need to refresh")
-                return False
+                return True
 
             response = requests.get(url + '/status', headers=self.headers)
             refresh_status = json.loads(response.content.decode('utf-8'))['status']
