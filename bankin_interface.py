@@ -2,7 +2,7 @@ import requests
 import time
 from getAccounts.exceptions import PostGetErrors
 from getAccounts.log import log
-import pandas as pd
+import json
 
 
 class BankinInterface:
@@ -55,8 +55,11 @@ class BankinInterface:
 
         # While the item is not refreshed check for its status every second for 20 seconds
         self.timeout = 20
-        while response.content.json()['status'] != 'finished':
+        refresh_status = json.loads(response.content.decode('utf-8'))['status']
+        while refresh_status != 'finished' or refresh_status != 'finished_error':
             response = requests.get(url, headers=self.headers)
+            refresh_status = json.loads(response.content.decode('utf-8'))['status']
+
             print("Retrieving data from banks; timeout after " + str(self.timeout) + "s")
             time.sleep(1)
             self.timeout -= 1
