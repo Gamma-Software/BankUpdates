@@ -39,22 +39,34 @@ class BankinInterface:
 
     def refresh_item(self, item_to_refresh):
         """ Refresh the items"""
-        response = requests.post(self.items_url + item_to_refresh + '/refresh', headers=self.headers)
-        if response.status_code != 200:
+        # Store the url
+        url = self.items_url + '/' + str(item_to_refresh) + '/refresh'
+
+        # Ask for item refresh
+        response = requests.post(url, headers=self.headers)
+        if response.status_code != 200 and response.status_code != 202:
             raise PostGetErrors(response.status_code, "error raised on refreshing")
-        response = requests.get(self.items_url + item_to_refresh + '/refresh/status', headers=self.headers)
+
+        # Check if the item is refreshed
+        response = requests.get(url + '/status', headers=self.headers)
+
+        # While the item is not refreshed check for its status every second for 20 seconds
         self.timeout = 20
-        while response.json()['status'] != 'finished':
-            response = requests.get(self.items_url + item_to_refresh + '/refresh/status', headers=self.headers)
+        while response.content.json()['status'] != 'finished':
+            response = requests.get(url, headers=self.headers)
             print("Retrieving data from banks; timeout after " + str(self.timeout) + "s")
             time.sleep(1)
             self.timeout -= 1
             if self.timeout <= 0:
+                print("Retrieving data from banks; Timeout ! Please try to connect to your bankin account"
+                      " on the web and understand the issue")
                 return False
         log("Bank accounts updated")
         return True
 
     def refresh_items(self, items_to_refresh):
+        """ Refresh all the items"""
+        log("Refresh bank accounts")
         for item_to_refresh in items_to_refresh:
             if not self.refresh_item(item_to_refresh):
                 return False
@@ -62,8 +74,10 @@ class BankinInterface:
 
     def get_items_ids(self):
         """ Get all the items ids"""
+        items_id = []
         for account in self.get_items_response_json():
-            self.item.update({'item': account.get('item').get('id')})
+            items_id.append(account.get('item').get('id'))
+        return items_id
 
     def get_items_response_json(self):
         """ Get all the items response"""
@@ -75,21 +89,8 @@ class BankinInterface:
     def get_items_balance(self):
         """ Get all the items balance and store them in a useful DataFrame"""
         log("Retrieved items balance")
-        account_name = []
-        id = []
-        balance = []
-        update_time = []
-        data = {}
-        dataframe_to_return = pd.DataFrame()
-        for account in self.get_items_response_json():
-            #data_to_add = {account.get('name') + ': ' + str(account.get('item').get('id')):{}}
-            df = pd.DataFrame([{str(account.get('balance')):
-                              account.get('name') + ': ' + str(account.get('item').get('id')),
-                              'updated_at': pd.Timestamp(account.get('updated_at')).tz_localize(None)}])
-            dataframe_to_return.join(df)
-            print(dataframe_to_return)
-        # Clean dataframe
-        return dataframe_to_return
+        items = self.get_items_response_json()
+        return items
 
     def logout(self):
         """ Logout the user"""
