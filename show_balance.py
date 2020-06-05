@@ -1,32 +1,67 @@
 import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from getAccounts.excel_interface import ExcelInterface
 
-def show_balance():
-    print("test")
 
-    df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv')
+def show_balance(df: pd.DataFrame, options):
+    print("Show balance")
+    nb_items = df.shape[1]
 
-    fig = go.Figure(go.Scatter(
-        x=df['Date'],
-        y=df['mavg']
-    ))
+    specs = []
+    for n in range(nb_items):
+        specs.append([{"type": "scatter"}])
 
-    fig.update_xaxes(
-        rangeslider_visible=True,
-        tickformatstops=[
-            dict(dtickrange=[None, 1000], value="%H:%M:%S.%L ms"),
-            dict(dtickrange=[1000, 60000], value="%H:%M:%S s"),
-            dict(dtickrange=[60000, 3600000], value="%H:%M m"),
-            dict(dtickrange=[3600000, 86400000], value="%H:%M h"),
-            dict(dtickrange=[86400000, 604800000], value="%e. %b d"),
-            dict(dtickrange=[604800000, "M1"], value="%e. %b w"),
-            dict(dtickrange=["M1", "M12"], value="%b '%y M"),
-            dict(dtickrange=["M12", None], value="%Y Y")
-        ]
+    fig = make_subplots(
+        rows=nb_items, cols=1,
+        shared_xaxes=True,
+        specs=specs,
+        subplot_titles=df.columns[1:]
     )
 
+    # Display the evolution
+    for i in range(1, nb_items):
+        print(df['timestamp'])
+        fig.add_trace(
+            go.Scatter(x=df['timestamp'], y=df.iloc[:, i], name=df.iloc[:, i].name, line_shape=options['line_shape']),
+            row=i, col=1)
+
+        fig.update_layout(
+            xaxis=dict(
+                showline=True,
+                showgrid=False,
+                showticklabels=True,
+                linecolor='rgb(204, 204, 204)',
+                linewidth=1,
+                ticks='outside'
+            ),
+            yaxis=dict(
+                showgrid=False,
+                zeroline=False,
+                showline=False,
+                showticklabels=False,
+            ),
+            showlegend=False,
+            plot_bgcolor='white',
+        )
+
+    fig.update_xaxes(
+        row=1, col=1,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all")
+            ])
+        )
+    )
     fig.show()
 
 
 if __name__ == "__main__":
+    excel_interface = ExcelInterface('accounts.xlsx')
+
     # execute only if run as a script
-    show_balance()
+    show_balance(excel_interface.read_excel_in_pd(), {'line_shape': 'spline'})
