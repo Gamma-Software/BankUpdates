@@ -1,4 +1,5 @@
 import pandas as pd
+from os import path
 
 
 class ExcelInterface:
@@ -10,7 +11,7 @@ class ExcelInterface:
         account = data[0]
         name = account.get('name')
         if account.get('custom_name') is not None:
-            name = name + '  ' + account.get('custom_name')
+            name = account.get('custom_name')
         dataframe_to_return = pd.DataFrame({
             'timestamp': [pd.Timestamp(account.get('updated_at')).floor('min').tz_convert(None)],
             name + ': ' + str(account.get('item').get('id')): [account.get('balance')]})
@@ -23,7 +24,7 @@ class ExcelInterface:
         for account in iteraccount:
             name = account.get('name')
             if account.get('custom_name') is not None:
-                name = name + '  ' + account.get('custom_name')
+                name = account.get('custom_name')
             df = pd.DataFrame({
                 'timestamp': [pd.Timestamp(account.get('updated_at')).floor('min').tz_convert(None)],
                 name + ': ' + str(account.get('item').get('id')): [account.get('balance')]})
@@ -38,12 +39,16 @@ class ExcelInterface:
                                 datetime_format='mmm d yyyy hh:mm:ss',
                                 date_format='mmmm dd yyyy')
 
+        # Clean the data frame
+        cleaned_data = self.clean_data(data)
+
         # Read the current dataframe
-        current_dataframe = pd.read_excel(self.file_name, index_col=None)
-        print(current_dataframe)
-
-        merged_dataframe = pd.merge(current_dataframe, self.clean_data(data), on='timestamp', how='outer')
-
+        if path.exists(self.file_name):
+            current_dataframe = pd.read_excel(self.file_name, index_col=None)
+            merged_dataframe = pd.merge(current_dataframe, cleaned_data, on='timestamp', how='outer')
+        else:
+            merged_dataframe = cleaned_data
         merged_dataframe.to_excel(writer, sheet_name='Sheet1', index=False)
 
-        writer.save()
+        # Save and close
+        writer.close()
