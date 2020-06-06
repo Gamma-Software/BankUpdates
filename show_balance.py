@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from getAccounts.excel_interface import ExcelInterface
@@ -26,24 +27,20 @@ def show_balance(df: pd.DataFrame, options):
             go.Scatter(x=df['timestamp'], y=df.iloc[:, i], name=df.iloc[:, i].name, line_shape=options['line_shape']),
             row=i, col=1)
 
-        fig.update_layout(
-            xaxis=dict(
-                showline=True,
-                showgrid=False,
-                showticklabels=True,
-                linecolor='rgb(204, 204, 204)',
-                linewidth=1,
-                ticks='outside'
-            ),
-            yaxis=dict(
-                showgrid=False,
-                zeroline=False,
-                showline=False,
-                showticklabels=False,
-            ),
-            showlegend=False,
-            plot_bgcolor='white',
-        )
+    fig.update_layout(
+        xaxis=dict(
+            showgrid=False,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=1,
+            ticks='outside'
+        ),
+        yaxis=dict(
+            showgrid=False,
+            zeroline=False,
+        ),
+        showlegend=False,
+        plot_bgcolor='white',
+    )
 
     fig.update_xaxes(
         row=1, col=1,
@@ -57,7 +54,7 @@ def show_balance(df: pd.DataFrame, options):
             ])
         )
     )
-    fig.show()
+    plotly.offline.plot(fig, filename='account.html')
 
 
 if __name__ == "__main__":
