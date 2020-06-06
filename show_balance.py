@@ -64,4 +64,6 @@ if __name__ == "__main__":
     excel_interface = ExcelInterface('accounts.xlsx')
 
     # execute only if run as a script
-    show_balance(excel_interface.read_excel_in_pd(), {'line_shape': 'spline'})
+    accounts = excel_interface.read_excel_in_pd()
+    if not accounts.empty:
+        show_balance(accounts, {'line_shape': 'spline'})
