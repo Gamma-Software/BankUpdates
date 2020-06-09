@@ -15,7 +15,6 @@ def show_balance(df: pd.DataFrame, options):
 
     fig = make_subplots(
         rows=nb_items, cols=1,
-        shared_xaxes=True,
         specs=specs,
         subplot_titles=df.columns[1:]
     )
@@ -43,7 +42,6 @@ def show_balance(df: pd.DataFrame, options):
     )
 
     fig.update_xaxes(
-        row=1, col=1,
         rangeselector=dict(
             buttons=list([
                 dict(count=1, label="1m", step="month", stepmode="backward"),
