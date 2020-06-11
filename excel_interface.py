@@ -34,6 +34,13 @@ class ExcelInterface:
         dataframe_to_return.sort_values(by='timestamp', inplace=True)
         return dataframe_to_return
 
+    def read_excel_in_pd(self):
+        """ Read the current dataframe"""
+        current_dataframe = pd.DataFrame()
+        if path.exists(self.file_name):
+            current_dataframe = pd.read_excel(self.file_name, index_col=None)
+        return current_dataframe
+
     def save_in_excel(self, data):
         writer = pd.ExcelWriter(self.file_name, engine='xlsxwriter',
                                 datetime_format='mmm d yyyy hh:mm:ss',
@@ -43,7 +50,7 @@ class ExcelInterface:
         cleaned_data = self.clean_data(data)
 
         # Read the current dataframe
-        if path.exists(self.file_name):
+        if not self.read_excel_in_pd().empty:
             current_dataframe = pd.read_excel(self.file_name, index_col=None)
             merged_dataframe = pd.merge(current_dataframe, cleaned_data, on='timestamp', how='outer')
         else:
