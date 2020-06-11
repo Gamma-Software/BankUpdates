@@ -10,13 +10,15 @@ def show_balance(df: pd.DataFrame, options):
     # Create the figure
     fig = go.Figure()
 
-    # Display the evolution
+    # List the buttons settings
     button_list = list()
 
+    # Loop over the account balance
     nb_items = df.shape[1]
     for i in range(1, nb_items):
         name = df.iloc[:, i].name
 
+        # Add account balance trace
         fig.add_trace(
             go.Scatter(x=df['timestamp'], y=df.iloc[:, i],
                        name=name,
@@ -25,7 +27,7 @@ def show_balance(df: pd.DataFrame, options):
                        line=dict(color="rgb(0, 143, 213)", width=3, dash="dot"),
                        marker=dict(size=8),
                        visible=True if i == 1 else False))
-
+        # Add button settings
         button_list.append(
             dict(label=name,
                  method="update",
@@ -33,6 +35,7 @@ def show_balance(df: pd.DataFrame, options):
                        {"title": "<b>"+name+"</b>",
                         "annotations": []}]))
 
+    # Update layout (color, legend, button)
     fig.update_layout(
         margin=dict(t=150, b=20),
         showlegend=False,
@@ -57,6 +60,7 @@ def show_balance(df: pd.DataFrame, options):
         hovermode='x unified'
     )
 
+    # Add picker date and range slider
     fig.update_xaxes(
         rangeselector=dict(
             buttons=list([
