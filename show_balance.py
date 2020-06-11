@@ -62,6 +62,7 @@ def show_balance(df: pd.DataFrame, options):
 
     # Add picker date and range slider
     fig.update_xaxes(
+        rangeslider_visible=True,
         rangeselector=dict(
             buttons=list([
                 dict(count=1, label="1m", step="month", stepmode="backward"),
