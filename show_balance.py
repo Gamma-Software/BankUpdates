@@ -1,7 +1,6 @@
 import pandas as pd
 import plotly
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 from getAccounts.excel_interface import ExcelInterface
 
 
@@ -9,15 +8,8 @@ def show_balance(df: pd.DataFrame, options):
     print("Show balance")
     nb_items = df.shape[1]
 
-    specs = []
-    for n in range(nb_items):
-        specs.append([{"type": "scatter"}])
-
-    fig = make_subplots(
-        rows=nb_items, cols=1,
-        specs=specs,
-        subplot_titles=df.columns[1:]
-    )
+    # Create the figure
+    fig = go.Figure()
 
     # Display the evolution
     for i in range(1, nb_items):
