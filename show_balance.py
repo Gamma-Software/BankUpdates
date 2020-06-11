@@ -15,19 +15,33 @@ def show_balance(df: pd.DataFrame, options):
     for i in range(1, nb_items):
         print(df['timestamp'])
         fig.add_trace(
-            go.Scatter(x=df['timestamp'], y=df.iloc[:, i], name=df.iloc[:, i].name, line_shape=options['line_shape']),
-            row=i, col=1)
+            go.Scatter(x=df['timestamp'], y=df.iloc[:, i],
+                       name=df.iloc[:, i].name,
+                       line_shape=options['line_shape'],
+                       line=dict(color="rgb(0, 143, 213)", width=3, dash="dot"),
+                       marker=dict(size=8),
+                       visible=True if i == 1 else False))
+
+        button_list.append(
+            dict(label=df.iloc[:, i].name,
+                 method="update",
+                 args=[{"visible": [o == i for o in range(1, nb_items)]},
+                       {"title": "<b>"+df.iloc[:, i].name+"</b>",
+                        "annotations": []}]))
 
     fig.update_layout(
         xaxis=dict(
             showgrid=False,
             linecolor='rgb(204, 204, 204)',
             linewidth=1,
-            ticks='outside'
-        ),
-        yaxis=dict(
-            showgrid=False,
-            zeroline=False,
+        updatemenus=[
+            dict(
+                type="buttons",
+                direction="down",
+                buttons=button_list,
+                active=0,
+            )
+        ],
         ),
         showlegend=False,
         plot_bgcolor='white',
@@ -53,4 +67,4 @@ if __name__ == "__main__":
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
     if not accounts.empty:
-        show_balance(accounts, {'line_shape': 'spline'})
+        show_balance(accounts, {'line_shape': 'spline', 'color': 'rgb(0, 143, 213)'})
