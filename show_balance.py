@@ -12,6 +12,7 @@ def show_balance(df: pd.DataFrame, options):
     fig = go.Figure()
 
     # Display the evolution
+    button_list = list()
     for i in range(1, nb_items):
         print(df['timestamp'])
         fig.add_trace(
@@ -30,10 +31,10 @@ def show_balance(df: pd.DataFrame, options):
                         "annotations": []}]))
 
     fig.update_layout(
-        xaxis=dict(
-            showgrid=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=1,
+        margin=dict(t=150, b=20),
+        showlegend=False,
+        plot_bgcolor='rgb(230, 230,230)',
+        paper_bgcolor='rgb(240,240,240)',
         updatemenus=[
             dict(
                 type="buttons",
@@ -42,9 +43,15 @@ def show_balance(df: pd.DataFrame, options):
                 active=0,
             )
         ],
+        xaxis_title='date',
+        yaxis_title='balance',
+        title="<b>"+df.iloc[:, 1].name+"</b>",
+        title_x=0.5,
+        font=dict(
+            size=16,
+            color="rgb(68,68,68)"
         ),
-        showlegend=False,
-        plot_bgcolor='white',
+        yaxis_tickformat='€'
     )
 
     fig.update_xaxes(
