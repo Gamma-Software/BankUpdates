@@ -6,28 +6,31 @@ from getAccounts.excel_interface import ExcelInterface
 
 def show_balance(df: pd.DataFrame, options):
     print("Show balance")
-    nb_items = df.shape[1]
 
     # Create the figure
     fig = go.Figure()
 
     # Display the evolution
     button_list = list()
+
+    nb_items = df.shape[1]
     for i in range(1, nb_items):
-        print(df['timestamp'])
+        name = df.iloc[:, i].name
+
         fig.add_trace(
             go.Scatter(x=df['timestamp'], y=df.iloc[:, i],
-                       name=df.iloc[:, i].name,
+                       name=name,
+                       hovertemplate='Balance: %{y:.2f}€<extra></extra>',
                        line_shape=options['line_shape'],
                        line=dict(color="rgb(0, 143, 213)", width=3, dash="dot"),
                        marker=dict(size=8),
                        visible=True if i == 1 else False))
 
         button_list.append(
-            dict(label=df.iloc[:, i].name,
+            dict(label=name,
                  method="update",
                  args=[{"visible": [o == i for o in range(1, nb_items)]},
-                       {"title": "<b>"+df.iloc[:, i].name+"</b>",
+                       {"title": "<b>"+name+"</b>",
                         "annotations": []}]))
 
     fig.update_layout(
@@ -51,7 +54,7 @@ def show_balance(df: pd.DataFrame, options):
             size=16,
             color="rgb(68,68,68)"
         ),
-        yaxis_tickformat='€'
+        hovermode='x unified'
     )
 
     fig.update_xaxes(
