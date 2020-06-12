@@ -2,6 +2,7 @@ import pandas as pd
 import plotly
 import plotly.graph_objects as go
 from getAccounts.excel_interface import ExcelInterface
+from scipy.signal import find_peaks
 
 
 def show_balance(df: pd.DataFrame, options):
@@ -12,6 +13,7 @@ def show_balance(df: pd.DataFrame, options):
 
     # List the buttons settings
     button_list = list()
+    indices = []
 
     # Loop over the account balance
     nb_items = df.shape[1]
@@ -27,11 +29,24 @@ def show_balance(df: pd.DataFrame, options):
                        line=dict(color="rgb(0, 143, 213)", width=3, dash="dot"),
                        marker=dict(size=8),
                        visible=True if i == 1 else False))
+        fig.add_trace(
+            go.Scatter(
+                x=[df['timestamp'][j] for j in find_peaks(df.iloc[:, i])[0]],
+                y=[df.iloc[:, i][j] for j in find_peaks(df.iloc[:, i])[0]],
+                mode='markers',
+                marker=dict(
+                    size=8,
+                    color='red',
+                    symbol='cross'
+                ),
+                name='Detected Peaks',
+                visible=True if i == 1 else False))
+
         # Add button settings
         button_list.append(
             dict(label=name,
                  method="update",
-                 args=[{"visible": [o == i for o in range(1, nb_items)]},
+                 args=[{"visible": [[o == i, o == i][1:-1] for o in range(1, nb_items*2, 1)]},
                        {"title": "<b>"+name+"</b>",
                         "annotations": []}]))
 
