@@ -1,6 +1,7 @@
 from getAccounts.bankin_interface import BankinInterface
 from getAccounts.exceptions import PostGetErrors
 from getAccounts.excel_interface import ExcelInterface
+import getpass
 
 
 def store_balance():
@@ -8,8 +9,11 @@ def store_balance():
 
     # Open the login file and retrieve the personal data to login to Bankin account
     f = open("login.txt", "r")
-    [email, password, client_id, client_secret] = f.read().splitlines()
+    [email, client_id, client_secret] = f.read().splitlines()
     f.close()
+
+    # Get the password in the console
+    password = getpass.getpass('Type your bankin password: ')
 
     # Use the Bankin interface to login, refresh the balance, save it in an excel file, logout
     bankin_interface = BankinInterface(email, password, client_id, client_secret)
