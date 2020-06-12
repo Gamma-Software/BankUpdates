@@ -1,6 +1,6 @@
-from getAccounts.bankin_interface import BankinInterface
-from getAccounts.exceptions import PostGetErrors
-from getAccounts.excel_interface import ExcelInterface
+from get_account_api.bankin_interface import BankinInterface
+from get_account_api.exceptions import PostGetErrors
+from get_account_api.excel_interface import ExcelInterface
 import getpass
 
 

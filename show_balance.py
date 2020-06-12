@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly
 import plotly.graph_objects as go
-from getAccounts.excel_interface import ExcelInterface
+from get_account_api.excel_interface import ExcelInterface
 from scipy.signal import find_peaks
 
 
