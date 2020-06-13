@@ -1,7 +1,7 @@
 import requests
 import time
-from getAccounts.exceptions import PostGetErrors
-from getAccounts.log import log
+from get_account_api.exceptions import PostGetErrors
+from get_account_api.log import log
 import json
 
 
