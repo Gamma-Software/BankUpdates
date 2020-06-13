@@ -1,6 +1,6 @@
-from getAccounts.bankin_interface import BankinInterface
-from getAccounts.exceptions import PostGetErrors
-from getAccounts.excel_interface import ExcelInterface
+from get_account_api.bankin_interface import BankinInterface
+from get_account_api.exceptions import PostGetErrors
+from get_account_api.excel_interface import ExcelInterface
 import getpass
 
 
@@ -28,6 +28,10 @@ def store_balance():
         print("error: " + error.message)
 
 
-if __name__ == "__main__":
+def main():
     # execute only if run as a script
     store_balance()
+
+
+if __name__ == "__main__":
+    main()
