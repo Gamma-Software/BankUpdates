@@ -91,10 +91,14 @@ def show_balance(df: pd.DataFrame, options):
     plotly.offline.plot(fig, filename='account.html')
 
 
-if __name__ == "__main__":
+def main():
     excel_interface = ExcelInterface('accounts.xlsx')
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
     if not accounts.empty:
         show_balance(accounts, {'line_shape': 'spline', 'color': 'rgb(0, 143, 213)'})
+
+
+if __name__ == "__main__":
+    main()

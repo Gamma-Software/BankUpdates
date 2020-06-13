@@ -28,6 +28,10 @@ def store_balance():
         print("error: " + error.message)
 
 
-if __name__ == "__main__":
+def main():
     # execute only if run as a script
     store_balance()
+
+
+if __name__ == "__main__":
+    main()
