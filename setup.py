@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="get-account",
-    version="0.1.0",
+    version="1.0.0",
     author="Valentin Rudloff",
     author_email="valentin.rudloff.perso@gmail.com",
     description="A python package to retrieve your bankin account balances, store them periodically and display "
