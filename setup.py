@@ -18,5 +18,5 @@ setuptools.setup(
     ],
     entry_points={"console_scripts": ["show_balance=show_balance:main",
                                       "store_balance=store_balance:main"]},
-    python_requires='>=3.7',
+    python_requires='>=2.7',
 )
