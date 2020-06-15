@@ -58,8 +58,9 @@ docs/_build/
 target/
 
 
-login.txt
 accounts.xlsx
+
+accounts.hmtl
 
 # Compiled python modules.
 *.pyc
@@ -71,4 +72,5 @@ accounts.xlsx
 /*.egg-info
 
 /login/bankin_oauth.yml
+
 /login/onedrive_oauth.yml
