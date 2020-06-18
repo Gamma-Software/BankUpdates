@@ -30,11 +30,7 @@ def setup_onedrive():
     client_secret = str(input("input onedrive client_secret: "))
     onedrive_uri = str(input("input onedrive onedrive_uri: "))
 
-    onedrive_oauth = [
-        {'client_id': client_id},
-        {'client_secret': client_secret},
-        {'onedrive_uri': onedrive_uri}
-    ]
+    onedrive_oauth = {'client_id': client_id, 'client_secret': client_secret, 'onedrive_uri': onedrive_uri}
 
     # Store in the corresponding yaml
     with open(path_files.onedrive_oauth, 'w') as file:
@@ -54,11 +50,7 @@ def setup_bankin():
     client_id = str(input("input Bankin client_id: "))
     client_secret = str(input("input Bankin client_secret: "))
 
-    bankin_oauth = [
-        {'email': email},
-        {'client_id': client_id},
-        {'client_secret': client_secret}
-    ]
+    bankin_oauth = {'email': email, 'client_id': client_id, 'client_secret': client_secret}
 
     # Store in the corresponding yaml
     with open(path_files.bankin_oauth, 'w') as file:
