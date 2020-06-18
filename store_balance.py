@@ -31,7 +31,8 @@ def store_balance():
                                            onedrive_param["onedrive_uri"])
 
     # Authenticate to onedrive
-    onedrive_interface.authenticate()
+    if not onedrive_interface.authenticate():
+        exit(0)
 
     # Download the file
     onedrive_interface.download_file(path_files.account_filename, path_files.data_temp_file)
