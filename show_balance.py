@@ -2,6 +2,7 @@ import pandas as pd
 import plotly
 import plotly.graph_objects as go
 from get_account_api.excel_interface import ExcelInterface
+import path_files
 from scipy.signal import find_peaks
 
 
@@ -92,7 +93,7 @@ def plot(df: pd.DataFrame, options):
 
 
 def show_balance():
-    excel_interface = ExcelInterface('accounts.xlsx')
+    excel_interface = ExcelInterface(path_files.data_temp_file, path_files.account_filename)
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()

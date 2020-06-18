@@ -3,16 +3,19 @@ from get_account_api.exceptions import PostGetErrors
 from get_account_api.excel_interface import ExcelInterface
 from get_account_api.onedrive_interface import OnedriveInterface
 import get_account_api.parameters_parsing as conf
+from get_account_api.log import log
+import path_files
 import getpass
 import os
+from pathlib import Path
 
 
 def store_balance():
     """ Main script to login, refresh the balance, save it in an excel file, logout"""
 
     # Open the login file and retrieve the personal data to login to Bankin account and Onedrive
-    bankin_param = conf.parse_bankin_params("login/bankin_oauth.yml")
-    onedrive_param = conf.parse_onedrive_params("login/onedrive_oauth.yml")
+    bankin_param = conf.parse_bankin_params(path_files.bankin_oauth)
+    onedrive_param = conf.parse_onedrive_params(path_files.onedrive_oauth)
 
     # Get the password in the console
     password = getpass.getpass('Type your bankin password: ')
@@ -26,22 +29,17 @@ def store_balance():
     # Authenticate to onedrive
     onedrive_interface.authenticate()
 
-    # If the get_account folders exists then create folder
-    if os.path.exists(os.path.join(os.getenv('HOME'), '/.get_account')):
-        os.mkdir(os.path.join(os.getenv('HOME'), '/.get_account/temp_file'))
-
     # Download the file
-    onedrive_interface.download_file('accounts.xlsx',
-                                     os.path.join(os.getenv('HOME'), '/.get_account/temp_file/accounts.xlsx'))
+    onedrive_interface.download_file(path_files.account_filename, path_files.data_temp_file)
 
     try:
         if bankin_interface.authenticate():
             if bankin_interface.refresh_items(bankin_interface.get_items_ids()):
                 data = bankin_interface.get_items_balance()  # Get the latest balance of all the bankin accounts
                 bankin_interface.logout()
-                excel_interface = ExcelInterface('accounts.xlsx')
+                excel_interface = ExcelInterface(path_files.data_temp_file, path_files.account_filename)
                 excel_interface.save_in_excel(data)
-                onedrive_interface.upload_file("accounts.xlsx", os.path.join(os.path.dirname(__file__), 'accounts.xlsx'))
+                onedrive_interface.upload_file(path_files.account_filename, path_files.data_temp_file)
     except PostGetErrors as error:
         print("error: " + error.message)
 

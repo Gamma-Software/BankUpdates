@@ -1,6 +1,7 @@
 from get_account_api.log import log
 from get_account_api.onedrive_interface import OnedriveInterface
 from get_account_api.bankin_interface import BankinInterface
+import path_files
 import getpass
 import os
 import yaml
@@ -14,13 +15,13 @@ def init():
 
 def create_folders():
     # If the get_account folders exists then create folder
-    if not os.path.exists(os.path.join(os.path.expanduser('~/.get_account/temp_file/'))):
-        log("Create folders temps_file")
-        os.makedirs(os.path.join(os.path.expanduser('~/.get_account/temp_file/')))
+    if not os.path.exists(path_files.temp_folder):
+        log("Create folders temps_file in " + path_files.temp_folder)
+        os.makedirs(path_files.temp_folder)
 
-    if not os.path.exists(os.path.join(os.path.expanduser('~/.get_account/configs/'))):
-        log("Create folders configs")
-        os.makedirs(os.path.join(os.path.expanduser('~/.get_account/configs/')))
+    if not os.path.exists(path_files.config_folder):
+        log("Create folders configs in " + path_files.config_folder)
+        os.makedirs(path_files.config_folder)
 
 
 def setup_onedrive():
@@ -36,7 +37,7 @@ def setup_onedrive():
     ]
 
     # Store in the corresponding yaml
-    with open(os.path.join(os.path.expanduser('~/.get_account/configs/'), 'onedrive_oauth.yml'), 'w') as file:
+    with open(path_files.onedrive_oauth, 'w') as file:
         yaml.dump(onedrive_oauth, file)
 
     # Test the connection
@@ -60,7 +61,7 @@ def setup_bankin():
     ]
 
     # Store in the corresponding yaml
-    with open(os.path.join(os.path.expanduser('~/.get_account/configs/'), 'bankin_oauth.yml'), 'w') as file:
+    with open(path_files.bankin_oauth, 'w') as file:
         yaml.dump(bankin_oauth, file)
 
     # Test the connection
