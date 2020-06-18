@@ -30,6 +30,10 @@ def store_balance():
     if os.path.exists(os.path.join(os.getenv('HOME'), '/.get_account')):
         os.mkdir(os.path.join(os.getenv('HOME'), '/.get_account/temp_file'))
 
+    # Download the file
+    onedrive_interface.download_file('accounts.xlsx',
+                                     os.path.join(os.getenv('HOME'), '/.get_account/temp_file/accounts.xlsx'))
+
     try:
         if bankin_interface.authenticate():
             if bankin_interface.refresh_items(bankin_interface.get_items_ids()):
