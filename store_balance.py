@@ -26,6 +26,10 @@ def store_balance():
     # Authenticate to onedrive
     onedrive_interface.authenticate()
 
+    # If the get_account folders exists then create folder
+    if os.path.exists(os.path.join(os.getenv('HOME'), '/.get_account')):
+        os.mkdir(os.path.join(os.getenv('HOME'), '/.get_account/temp_file'))
+
     try:
         if bankin_interface.authenticate():
             if bankin_interface.refresh_items(bankin_interface.get_items_ids()):
