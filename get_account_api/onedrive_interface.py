@@ -1,5 +1,6 @@
 from get_account_api.log import log
 import onedrivesdk
+import onedrivesdk.error
 from onedrivesdk.helpers import GetAuthCodeServer
 
 
@@ -20,7 +21,12 @@ class OnedriveInterface:
         # Block thread until we have the code
         code = GetAuthCodeServer.get_auth_code(auth_url, self.redirect_uri)
         # Finally, authenticate!
-        self.client.auth_provider.authenticate(code, self.redirect_uri, self.client_secret)
+        try:
+            self.client.auth_provider.authenticate(code, self.redirect_uri, self.client_secret)
+        except onedrivesdk.error.ErrorCode as error:
+            log(error)
+            return False
+        return True
 
     def upload_file(self, name, path_to_file):
         log("Onedrive: Upload: " + name)
