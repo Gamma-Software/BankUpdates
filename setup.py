@@ -30,7 +30,7 @@ setuptools.setup(
     ],
     include_package_data=True,
     zip_safe=False,
-    install_requirements=get_dependencies(),
+    install_requires=get_dependencies(),
     entry_points={"console_scripts": ["setup_get_account=setup_oauth:init",
                                       "show_balance=show_balance:show_balance",
                                       "store_balance=store_balance:store_balance"]},
