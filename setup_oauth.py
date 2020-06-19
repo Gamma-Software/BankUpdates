@@ -33,11 +33,33 @@ def create_folders():
     bankin_oauth = {'email': 'none', 'client_id': 'none', 'client_secret': 'none'}
     with open(path_files.bankin_oauth, 'w') as file:
         yaml.dump(bankin_oauth, file)
+
+    # Options
+    options = {'send': 'none', 'save': 'local'}
+    with open(path_files.setup_options, 'w') as file:
+        yaml.dump(options, file)
+
+
+def setup_options(option, value):
+    log('Setup Options')
+
+    # Read option Yaml or create
+    options = conf.parse_setup_options(path_files.setup_options)
+
+    # Replace the option
+    options[option] = value
+    log('Set '+option+' to: ' + value)
+
+    # Save the option in the corresponding yaml
+    with open(path_files.setup_options, 'w') as file:
+        yaml.dump(options, file)
+
+
 def setup_onedrive():
-    log("Setup Onedrive Oauth")
-    client_id = str(input("input onedrive client_id: "))
-    client_secret = str(input("input onedrive client_secret: "))
-    onedrive_uri = str(input("input onedrive onedrive_uri: "))
+    log('Setup Onedrive Oauth')
+    client_id = str(input('input onedrive client_id: '))
+    client_secret = str(input('input onedrive client_secret: '))
+    onedrive_uri = str(input('input onedrive onedrive_uri: '))
 
     onedrive_oauth = {'client_id': client_id, 'client_secret': client_secret, 'onedrive_uri': onedrive_uri}
 

@@ -11,3 +11,9 @@ def parse_bankin_params(bankin_param_file_path):
     with open(bankin_param_file_path, 'r') as stream:
         bankin_param = yaml.safe_load(stream)
     return bankin_param
+
+
+def parse_setup_options(setup_options_file_path):
+    with open(setup_options_file_path, 'r') as stream:
+        setup_options = yaml.safe_load(stream)
+    return setup_options
