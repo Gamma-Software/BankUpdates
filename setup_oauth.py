@@ -23,7 +23,16 @@ def create_folders():
         log("Create folders configs in " + path_files.config_folder)
         os.makedirs(path_files.config_folder)
 
+    # Create empty yaml
+    # Onedrive oauth
+    onedrive_oauth = {'client_id': 'none', 'client_secret': 'none', 'onedrive_uri': 'none'}
+    with open(path_files.onedrive_oauth, 'w') as file:
+        yaml.dump(onedrive_oauth, file)
 
+    # Bankin oauth
+    bankin_oauth = {'email': 'none', 'client_id': 'none', 'client_secret': 'none'}
+    with open(path_files.bankin_oauth, 'w') as file:
+        yaml.dump(bankin_oauth, file)
 def setup_onedrive():
     log("Setup Onedrive Oauth")
     client_id = str(input("input onedrive client_id: "))
