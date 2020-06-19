@@ -1,26 +1,48 @@
 from get_account_api.log import log
 from get_account_api.onedrive_interface import OnedriveInterface
 from get_account_api.bankin_interface import BankinInterface
+import get_account_api.parameters_parsing as conf
 import path_files
 import getpass
 import os
 import yaml
+import argparse
 
 
-def init():
+def init(parser):
+    # If not created create the folders
     create_folders()
-    setup_onedrive()
-    setup_bankin()
+
+    parser.add_argument('--all', action='store_true', help='Setup the whole system')
+    parser.add_argument('--oauth', type=str, choices=['bankin', 'onedrive'], help='Authentication setup')
+    parser.add_argument('--save', type=str, choices=['local', 'onedrive'], help='Save the data in local or in onedrive')
+    parser.add_argument('--send', type=str, choices=['email', 'none'], help='Set an option to send an email or not')
+    args = parser.parse_args()
+    if args.send == 'email':
+        setup_options('send', 'email')
+    if args.send == 'none':
+        setup_options('send', 'none')
+    if args.save == 'local':
+        setup_options('save', 'local')
+    if args.save == 'onedrive':
+        setup_options('save', 'onedrive')
+    if args.oauth == 'bankin':
+        setup_bankin()
+    if args.oauth == 'onedrive':
+        setup_onedrive()
+    else:
+        setup_bankin()
+        setup_onedrive()
 
 
 def create_folders():
     # If the get_account folders exists then create folder
     if not os.path.exists(path_files.temp_folder):
-        log("Create folders temps_file in " + path_files.temp_folder)
+        log('Create folders temps_file in ' + path_files.temp_folder)
         os.makedirs(path_files.temp_folder)
 
     if not os.path.exists(path_files.config_folder):
-        log("Create folders configs in " + path_files.config_folder)
+        log('Create folders configs in ' + path_files.config_folder)
         os.makedirs(path_files.config_folder)
 
     # Create empty yaml
@@ -72,14 +94,14 @@ def setup_onedrive():
     if not onedrive_interface.authenticate():
         exit(0)
     else:
-        log("Onedrive Oauth Successful")
+        log('Onedrive Oauth Successful')
 
 
 def setup_bankin():
-    log("Setup Bankin Oauth")
-    email = str(input("input Bankin email: "))
-    client_id = str(input("input Bankin client_id: "))
-    client_secret = str(input("input Bankin client_secret: "))
+    log('Setup Bankin Oauth')
+    email = str(input('input Bankin email: '))
+    client_id = str(input('input Bankin client_id: '))
+    client_secret = str(input('input Bankin client_secret: '))
 
     bankin_oauth = {'email': email, 'client_id': client_id, 'client_secret': client_secret}
 
@@ -94,8 +116,9 @@ def setup_bankin():
     if bankin_interface.authenticate():
         exit(0)
     else:
-        log("Onedrive Oauth Successful")
+        log('Onedrive Oauth Successful')
 
 
-if __name__ == "__main__":
-    init()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    init(parser)
