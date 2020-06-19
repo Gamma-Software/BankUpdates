@@ -7,11 +7,13 @@ from get_account_api.log import log
 import path_files
 import getpass
 import os
-from pathlib import Path
 
 
 def store_balance():
     """ Main script to login, refresh the balance, save it in an excel file, logout"""
+
+    # Read options
+    options = conf.parse_setup_options(path_files.setup_options)
 
     # Check whether the setup is done
     if not os.path.exists(path_files.get_account_folder):
@@ -19,7 +21,6 @@ def store_balance():
 
     # Open the login file and retrieve the personal data to login to Bankin account and Onedrive
     bankin_param = conf.parse_bankin_params(path_files.bankin_oauth)
-    onedrive_param = conf.parse_onedrive_params(path_files.onedrive_oauth)
 
     # Get the password in the console
     password = getpass.getpass('Type your bankin password: ')
@@ -27,15 +28,18 @@ def store_balance():
     # Use the Bankin interface to login, refresh the balance, save it in an excel file, logout
     bankin_interface = BankinInterface(bankin_param["email"], password,
                                        bankin_param["client_id"], bankin_param["client_secret"])
-    onedrive_interface = OnedriveInterface(onedrive_param["client_id"], onedrive_param["client_secret"],
-                                           onedrive_param["onedrive_uri"])
 
-    # Authenticate to onedrive
-    if not onedrive_interface.authenticate():
-        exit(0)
+    if options["save"] == "onedrive":
+        onedrive_param = conf.parse_onedrive_params(path_files.onedrive_oauth)
+        onedrive_interface = OnedriveInterface(onedrive_param["client_id"], onedrive_param["client_secret"],
+                                               onedrive_param["onedrive_uri"])
 
-    # Download the file
-    onedrive_interface.download_file(path_files.account_filename, path_files.data_temp_file)
+        # Authenticate to onedrive
+        if not onedrive_interface.authenticate():
+            exit(0)
+
+        # Download the file
+        onedrive_interface.download_file(path_files.account_filename, path_files.data_temp_file)
 
     try:
         if bankin_interface.authenticate():
@@ -44,7 +48,11 @@ def store_balance():
                 bankin_interface.logout()
                 excel_interface = ExcelInterface(path_files.data_temp_file, path_files.account_filename)
                 excel_interface.save_in_excel(data)
-                onedrive_interface.upload_file(path_files.account_filename, path_files.data_temp_file)
+
+                if options['save'] == 'onedrive':
+                    onedrive_interface.upload_file(path_files.account_filename, path_files.data_temp_file)
+                if options['send'] == 'email':
+                    print('wip')
     except PostGetErrors as error:
         print("error: " + error.message)
 
