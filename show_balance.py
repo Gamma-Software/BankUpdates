@@ -2,10 +2,11 @@ import pandas as pd
 import plotly
 import plotly.graph_objects as go
 from get_account_api.excel_interface import ExcelInterface
+import path_files
 from scipy.signal import find_peaks
 
 
-def show_balance(df: pd.DataFrame, options):
+def plot(df: pd.DataFrame, options):
     print("Show balance")
 
     # Create the figure
@@ -91,14 +92,14 @@ def show_balance(df: pd.DataFrame, options):
     plotly.offline.plot(fig, filename='account.html')
 
 
-def main():
-    excel_interface = ExcelInterface('accounts.xlsx')
+def show_balance():
+    excel_interface = ExcelInterface(path_files.data_temp_file, path_files.account_filename)
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
     if not accounts.empty:
-        show_balance(accounts, {'line_shape': 'spline', 'color': 'rgb(0, 143, 213)'})
+        plot(accounts, {'line_shape': 'spline', 'color': 'rgb(0, 143, 213)'})
 
 
 if __name__ == "__main__":
-    main()
+    show_balance()
