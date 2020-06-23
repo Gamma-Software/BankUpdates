@@ -16,7 +16,8 @@ class OnedriveInterface:
             scopes=self.scopes)
 
     def authenticate(self):
-        log("Onedrive: Authenticate")
+        """ Authenticate to onedrive and return is success or not """
+        log('Onedrive: Authenticate')
         auth_url = self.client.auth_provider.get_auth_url(self.redirect_uri)
         # Block thread until we have the code
         code = GetAuthCodeServer.get_auth_code(auth_url, self.redirect_uri)
@@ -29,11 +30,13 @@ class OnedriveInterface:
         return True
 
     def upload_file(self, name, path_to_file):
-        log("Onedrive: Upload: " + name)
+        """ Upload the file corresponding file to the path """
+        log('Onedrive: Upload: ' + name)
         return self.client.item(drive='me', id='root').children[name].upload(path_to_file)
 
     def download_file(self, name, path_to_file):
-        log("Onedrive: Download: " + name)
+        """ Download the corresponding file if exists and store it in the path """
+        log('Onedrive: Download: ' + name)
         root_folder = self.client.item(drive='me', id='root').children.get()
         id_of_file = root_folder[0].id
 

@@ -17,7 +17,7 @@ def store_balance():
 
     # Check whether the setup is done
     if not os.path.exists(path_files.get_account_folder):
-        log("Please run 'python setup_oath.py' to setup your Onedrive and Bankin oauth configs")
+        log('Please run <python setup_oath.py> to setup your Onedrive and Bankin oauth configs')
 
     # Open the login file and retrieve the personal data to login to Bankin account and Onedrive
     bankin_param = conf.parse_bankin_params(path_files.bankin_oauth)
@@ -26,13 +26,13 @@ def store_balance():
     password = getpass.getpass('Type your bankin password: ')
     
     # Use the Bankin interface to login, refresh the balance, save it in an excel file, logout
-    bankin_interface = BankinInterface(bankin_param["email"], password,
-                                       bankin_param["client_id"], bankin_param["client_secret"])
+    bankin_interface = BankinInterface(bankin_param['email'], password,
+                                       bankin_param['client_id'], bankin_param['client_secret'])
 
-    if options["save"] == "onedrive":
+    if options['save'] == 'onedrive':
         onedrive_param = conf.parse_onedrive_params(path_files.onedrive_oauth)
-        onedrive_interface = OnedriveInterface(onedrive_param["client_id"], onedrive_param["client_secret"],
-                                               onedrive_param["onedrive_uri"])
+        onedrive_interface = OnedriveInterface(onedrive_param['client_id'], onedrive_param['client_secret'],
+                                               onedrive_param['onedrive_uri'])
 
         # Authenticate to onedrive
         if not onedrive_interface.authenticate():
@@ -54,8 +54,8 @@ def store_balance():
                 if options['send'] == 'email':
                     print('wip')
     except PostGetErrors as error:
-        print("error: " + error.message)
+        print('error: ' + error.message)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     store_balance()

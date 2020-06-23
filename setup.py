@@ -1,13 +1,13 @@
 import setuptools
 
-with open("README.md", "r") as fh:
+with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 ignored_dependencies = []
 
 
 def get_dependencies():
-    with open("requirements.txt", "r") as fh:
+    with open('requirements.txt', 'r') as fh:
         requirements = fh.read()
         requirements = requirements.split('\n')
         map(lambda r: r.strip(), requirements)
@@ -16,23 +16,23 @@ def get_dependencies():
 
 
 setuptools.setup(
-    name="get-account",
-    version="1.0.0",
-    author="Valentin Rudloff",
-    author_email="valentin.rudloff.perso@gmail.com",
-    description="A python package to retrieve your bankin account balances, store them periodically and display "
-                "them in a beautiful graph",
-    url="https://github.com/Gamma-Software/GetUpdates",
+    name='get-account',
+    version='1.0.0',
+    author='Valentin Rudloff',
+    author_email='valentin.rudloff.perso@gmail.com',
+    description='A python package to retrieve your bankin account balances, store them periodically and display '
+                'them in a beautiful graph',
+    url='https://github.com/Gamma-Software/GetUpdates',
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "Operating System :: OS Independent",
+        'Programming Language :: Python :: 3',
+        'Operating System :: OS Independent',
     ],
     include_package_data=True,
     zip_safe=False,
     install_requires=get_dependencies(),
-    entry_points={"console_scripts": ["setup_get_account=setup_oauth:init",
-                                      "show_balance=show_balance:show_balance",
-                                      "store_balance=store_balance:store_balance"]},
+    entry_points={'console_scripts': ['setup_get_account=setup_oauth:init',
+                                      'show_balance=show_balance:show_balance',
+                                      'store_balance=store_balance:store_balance']},
     python_requires='>=2.7',
 )
