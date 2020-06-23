@@ -14,7 +14,6 @@ def plot(df: pd.DataFrame, options):
 
     # List the buttons settings
     button_list = list()
-    indices = []
 
     # Loop over the account balance
     nb_items = df.shape[1]
