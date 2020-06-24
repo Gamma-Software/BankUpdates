@@ -107,7 +107,7 @@ class BankinInterface:
         log('logout user')
         response = requests.post(self.logout_url, headers=self.headers)
         if response.status_code != 200:
-            raise PostGetErrors(response.status_code, 'error raised on logout"'
+            raise PostGetErrors(response.status_code, 'error raised on logout')
 
     def check_bankin_account(self):
         """ Check the validity of the user's email"""
