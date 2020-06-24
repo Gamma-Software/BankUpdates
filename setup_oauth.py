@@ -1,5 +1,6 @@
 from get_account_api.log import log
 from get_account_api.onedrive_interface import OnedriveInterface
+from get_account_api.exceptions import PostGetErrors
 from get_account_api.bankin_interface import BankinInterface
 import get_account_api.parameters_parsing as conf
 import path_files
@@ -92,7 +93,9 @@ def setup_onedrive():
     # Test the connection
     onedrive_interface = OnedriveInterface(client_id, client_secret, onedrive_uri)
     if not onedrive_interface.authenticate():
-        exit(0)
+        log('Onedrive Oauth unsuccessful')
+        if input('Do you want to try again ? (y/n)') == 'y':
+            setup_bankin()
     else:
         log('Onedrive Oauth Successful')
 
@@ -113,10 +116,13 @@ def setup_bankin():
     # Get the password in the console
     password = getpass.getpass('Type your bankin password: ')
     bankin_interface = BankinInterface(email, password, client_id, client_secret)
-    if bankin_interface.authenticate():
-        exit(0)
-    else:
-        log('Onedrive Oauth Successful')
+    try:
+        if bankin_interface.authenticate():
+            log('Bankin Oauth Successful')
+    except PostGetErrors:
+        log('Bankin Oauth unsuccessful')
+        if input('Do you want to try again ? (y/n)') == 'y':
+            setup_bankin()
 
 
 if __name__ == '__main__':
