@@ -20,15 +20,15 @@ def init(parser):
     args = parser.parse_args()
     if args.send == 'email':
         setup_options('send', 'email')
-    if args.send == 'none':
+    elif args.send == 'none':
         setup_options('send', 'none')
-    if args.save == 'local':
+    elif args.save == 'local':
         setup_options('save', 'local')
-    if args.save == 'onedrive':
+    elif args.save == 'onedrive':
         setup_options('save', 'onedrive')
-    if args.oauth == 'bankin':
+    elif args.oauth == 'bankin':
         setup_bankin()
-    if args.oauth == 'onedrive':
+    elif args.oauth == 'onedrive':
         setup_onedrive()
     else:
         setup_bankin()
