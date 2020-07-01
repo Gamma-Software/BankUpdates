@@ -12,12 +12,12 @@ import os
 def store_balance():
     """ Main script to login, refresh the balance, save it in an excel file, logout"""
 
-    # Read options
-    options = conf.parse_setup_options(path_files.setup_options)
-
     # Check whether the setup is done
     if not os.path.exists(path_files.get_account_folder):
         log('Please run <python setup_oath.py> to setup your Onedrive and Bankin oauth configs')
+
+    # Read options
+    options = conf.parse_setup_options(path_files.setup_options)
 
     # Open the login file and retrieve the personal data to login to Bankin account and Onedrive
     bankin_param = conf.parse_bankin_params(path_files.bankin_oauth)
