@@ -15,6 +15,7 @@ def store_balance():
     # Check whether the setup is done
     if not os.path.exists(path_files.get_account_folder):
         log('Please run <python setup_oath.py> to setup your Onedrive and Bankin oauth configs')
+        exit(0)
 
     # Read options
     options = conf.parse_setup_options(path_files.setup_options)
