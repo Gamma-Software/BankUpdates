@@ -44,7 +44,7 @@ def store_balance():
 
     try:
         if bankin_interface.authenticate():
-            if bankin_interface.refresh_items(bankin_interface.get_items_ids()):
+            if bankin_interface.refresh_items():
                 data = bankin_interface.get_items_balance()  # Get the latest balance of all the bankin accounts
                 bankin_interface.logout()
                 excel_interface = ExcelInterface(path_files.data_temp_file, path_files.account_filename)
