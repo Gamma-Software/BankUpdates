@@ -37,51 +37,6 @@ class BankinInterface:
         self.headers.update({'Authorization': 'Bearer ' + response.json()['access_token']})
         return self.check_bankin_account()
 
-    def refresh_item(self, item_to_refresh):
-        """ Refresh the items"""
-        # Store the url
-        url = self.items_url + '/' + str(item_to_refresh) + '/refresh'
-
-        # Ask for item refresh
-        response = requests.post(url, headers=self.headers)
-        if response.status_code == 403:
-            print('No need to refresh')
-            return True
-        if response.status_code != 200 and response.status_code != 202:
-            raise PostGetErrors(response.status_code, 'error raised on refreshing')
-
-        # Check if the item is refreshed
-        response = requests.get(url + '/status', headers=self.headers)
-
-        # While the item is not refreshed check for its status every second for 20 seconds
-        self.timeout = 20
-        refresh_status = json.loads(response.content.decode('utf-8'))['status']
-        while refresh_status != 'finished':
-            if refresh_status != 'finished_error':
-                print("No need to refresh")
-                return True
-
-            response = requests.get(url + '/status', headers=self.headers)
-            refresh_status = json.loads(response.content.decode('utf-8'))['status']
-
-            print('Retrieving data from banks; timeout after ' + str(self.timeout) + 's')
-            time.sleep(1)
-            self.timeout -= 1
-            if self.timeout <= 0:
-                print('Retrieving data from banks; Timeout ! Please try to connect to your bankin account'
-                      ' on the web and understand the issue')
-                return False
-        log('Bank accounts updated')
-        return True
-
-    def refresh_items(self, items_to_refresh):
-        """ Refresh all the items"""
-        log('Refresh bank accounts')
-        for item_to_refresh in items_to_refresh:
-            if not self.refresh_item(item_to_refresh):
-                return False
-        return True
-
     def refresh_items(self):
         """ Refresh all the items"""
         log('Refresh bank accounts')
