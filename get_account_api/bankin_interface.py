@@ -82,6 +82,46 @@ class BankinInterface:
                 return False
         return True
 
+    def refresh_items(self):
+        """ Refresh all the items"""
+        log('Refresh bank accounts')
+
+        # Store the url
+        url = self.items_url + '/refresh'
+
+        # Ask for item refresh
+        response = requests.post(url, headers=self.headers)
+        if response.status_code != 200 and response.status_code != 202:
+            raise PostGetErrors(response.status_code, 'error raised on refreshing')
+
+        refreshed = False
+        while not refreshed:
+            # Check if the item is refreshed
+            response = requests.get(url + '/status', headers=self.headers)
+
+            # While the item is not refreshed check for its status every second for 20 seconds
+            refresh_response = json.loads(response.content.decode('utf-8'))['resources']
+
+            refreshed = True
+            for response in refresh_response:
+                if response['status'] == 'finished':
+                    continue
+                if response['status'] != 'finished':
+                    refreshed = False
+                if response['status'] == 'finished_error':
+                    print("Error on refresh")
+                    return True
+
+            print('Retrieving data from banks; timeout after ' + str(self.timeout) + 's')
+            time.sleep(1)
+            self.timeout -= 1
+            if self.timeout <= 0:
+                print('Retrieving data from banks; Timeout ! Please try to connect to your bankin account'
+                      ' on the web and understand the issue')
+                return False
+        log('Bank accounts updated')
+        return True
+
     def get_items_ids(self):
         """ Get all the items ids"""
         items_id = []
