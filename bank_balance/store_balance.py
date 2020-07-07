@@ -1,10 +1,9 @@
-from get_account_api.bankin_interface import BankinInterface
-from get_account_api.exceptions import PostGetErrors
-from get_account_api.excel_interface import ExcelInterface
-from get_account_api.onedrive_interface import OnedriveInterface
-import get_account_api.parameters_parsing as conf
-from get_account_api.log import log
-import path_files
+from bank_balance.library.bankin_interface import BankinInterface
+from bank_balance.library import PostGetErrors, path_files
+from bank_balance.library.excel_interface import ExcelInterface
+from bank_balance.library import OnedriveInterface
+import bank_balance.library.parameters_parsing as conf
+from bank_balance.library.log import log
 import getpass
 import os
 

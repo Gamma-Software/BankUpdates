@@ -1,9 +1,8 @@
-from get_account_api.log import log
-from get_account_api.onedrive_interface import OnedriveInterface
-from get_account_api.exceptions import PostGetErrors
-from get_account_api.bankin_interface import BankinInterface
-import get_account_api.parameters_parsing as conf
-import path_files
+from bank_balance.library.log import log
+from bank_balance.library import OnedriveInterface, path_files
+from bank_balance.library import PostGetErrors
+from bank_balance.library.bankin_interface import BankinInterface
+import bank_balance.library.parameters_parsing as conf
 import getpass
 import os
 import yaml

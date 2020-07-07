@@ -1,8 +1,8 @@
 import pandas as pd
 import plotly
 import plotly.graph_objects as go
-from get_account_api.excel_interface import ExcelInterface
-import path_files
+from bank_balance.library.excel_interface import ExcelInterface
+from bank_balance.library import path_files
 from scipy.signal import find_peaks
 
 
@@ -88,7 +88,7 @@ def plot(df: pd.DataFrame, options):
             ])
         )
     )
-    plotly.offline.plot(fig, filename='account.html')
+    plotly.offline.plot(fig, filename='../account.html')
 
 
 def show_balance():

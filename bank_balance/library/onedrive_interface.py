@@ -1,4 +1,4 @@
-from get_account_api.log import log
+from bank_balance.library.log import log
 import onedrivesdk
 import onedrivesdk.error
 from onedrivesdk.helpers import GetAuthCodeServer
