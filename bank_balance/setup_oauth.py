@@ -1,8 +1,8 @@
 from bank_balance.library.log import log
-from bank_balance.library import OnedriveInterface, path_files
+from bank_balance.library import OnedriveInterface, pathfiles
 from bank_balance.library import PostGetErrors
-from bank_balance.library.bankin_interface import BankinInterface
-import bank_balance.library.parameters_parsing as conf
+from bank_balance.library.bankininterface import BankinInterface
+import bank_balance.library.parametersparsing as conf
 import getpass
 import os
 import yaml
@@ -37,28 +37,27 @@ def init(parser):
 
 def create_folders():
     # If the get_account folders exists then create folder
-    if not os.path.exists(path_files.temp_folder):
-        log('Create folders temps_file in ' + path_files.temp_folder)
-        os.makedirs(path_files.temp_folder)
+    if not os.path.exists(pathfiles.temp_folder):
+        log('Create folders temps_file in ' + pathfiles.temp_folder)
+        os.makedirs(pathfiles.temp_folder)
 
-    if not os.path.exists(path_files.config_folder):
-        log('Create folders configs in ' + path_files.config_folder)
-        os.makedirs(path_files.config_folder)
+    if not os.path.exists(pathfiles.config_folder):
+        log('Create folders configs in ' + pathfiles.config_folder)
+        os.makedirs(pathfiles.config_folder)
 
     # Create empty yaml
     # Onedrive oauth
     onedrive_oauth = {'client_id': 'none', 'client_secret': 'none', 'onedrive_uri': 'none'}
-    with open(path_files.onedrive_oauth, 'w') as file:
+    with open(pathfiles.onedrive_oauth, 'w') as file:
         yaml.dump(onedrive_oauth, file)
 
     # Bankin oauth
     bankin_oauth = {'email': 'none', 'client_id': 'none', 'client_secret': 'none'}
-    with open(path_files.bankin_oauth, 'w') as file:
+    with open(pathfiles.bankin_oauth, 'w') as file:
         yaml.dump(bankin_oauth, file)
 
     # Options
     options = {'send': 'none', 'save': 'local', 'local_path': 'none'}
-    with open(path_files.setup_options, 'w') as file:
         yaml.dump(options, file)
 
 
@@ -66,7 +65,7 @@ def setup_options(option, value):
     log('Setup Options')
 
     # Read option Yaml or create
-    options = conf.parse_setup_options(path_files.setup_options)
+    options = conf.parse_setup_options(pathfiles.setup_options)
 
     # Replace the option
     options[option] = value
@@ -82,7 +81,7 @@ def setup_options(option, value):
         print(options)
 
     # Save the option in the corresponding yaml
-    with open(path_files.setup_options, 'w') as file:
+    with open(pathfiles.setup_options, 'w') as file:
         yaml.dump(options, file)
 
 
@@ -95,7 +94,7 @@ def setup_onedrive():
     onedrive_oauth = {'client_id': client_id, 'client_secret': client_secret, 'onedrive_uri': onedrive_uri}
 
     # Store in the corresponding yaml
-    with open(path_files.onedrive_oauth, 'w') as file:
+    with open(pathfiles.onedrive_oauth, 'w') as file:
         yaml.dump(onedrive_oauth, file)
 
     # Test the connection
@@ -117,7 +116,7 @@ def setup_bankin():
     bankin_oauth = {'email': email, 'client_id': client_id, 'client_secret': client_secret}
 
     # Store in the corresponding yaml
-    with open(path_files.bankin_oauth, 'w') as file:
+    with open(pathfiles.bankin_oauth, 'w') as file:
         yaml.dump(bankin_oauth, file)
 
     # Test the connection

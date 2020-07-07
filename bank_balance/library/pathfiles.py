@@ -1,6 +1,5 @@
 import os
 
-
 get_account_folder = os.path.expanduser('~/.get_account/')
 temp_folder = os.path.join(get_account_folder, 'temp_file/')
 config_folder = os.path.join(get_account_folder, 'configs/')
