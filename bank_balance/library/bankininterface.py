@@ -1,6 +1,6 @@
 import requests
 import time
-from bank_balance.library import PostGetErrors
+from bank_balance.library.exceptions import PostGetErrors
 from bank_balance.library.log import log
 import json
 

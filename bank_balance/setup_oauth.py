@@ -1,7 +1,8 @@
 from bank_balance.library.log import log
-from bank_balance.library import OnedriveInterface, pathfiles
-from bank_balance.library import PostGetErrors
+from bank_balance.library import pathfiles
+from bank_balance.library.exceptions import PostGetErrors
 from bank_balance.library.bankininterface import BankinInterface
+from bank_balance.library.onedriveinterface import OnedriveInterface
 import bank_balance.library.parametersparsing as conf
 import getpass
 import os
@@ -32,7 +33,8 @@ def init(parser):
         setup_onedrive()
     else:
         setup_bankin()
-        setup_onedrive()
+        if input('Do you want to setup onedrive ? (y/n)') == 'y':
+            setup_onedrive()
 
 
 def create_folders():

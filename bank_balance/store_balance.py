@@ -1,8 +1,9 @@
 from bank_balance.library.bankininterface import BankinInterface
-from bank_balance.library import PostGetErrors, pathfiles
 from bank_balance.library.excelinterface import ExcelInterface
-from bank_balance.library import OnedriveInterface
+from bank_balance.library.onedriveinterface import OnedriveInterface
 import bank_balance.library.parametersparsing as conf
+from bank_balance.library import pathfiles
+from bank_balance.library.exceptions import PostGetErrors
 from bank_balance.library.log import log
 import getpass
 import os
