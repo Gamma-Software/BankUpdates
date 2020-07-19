@@ -31,8 +31,8 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=get_dependencies(),
-    entry_points={'console_scripts': ['setup_get_account=setup_oauth:init',
-                                      'show_balance=show_balance:show_balance',
-                                      'store_balance=store_balance:store_balance']},
+    entry_points={'console_scripts': ['setup_bank_balance=bank_balance.setup_oauth:init',
+                                      'show_balance=bank_balance.show_balance:show_balance',
+                                      'store_balance=bank_balance.store_balance:store_balance']},
     python_requires='>=2.7',
 )

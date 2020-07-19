@@ -1,7 +1,7 @@
 import requests
 import time
-from get_account_api.exceptions import PostGetErrors
-from get_account_api.log import log
+from bank_balance.library.exceptions import PostGetErrors
+from bank_balance.library.log import log
 import json
 
 

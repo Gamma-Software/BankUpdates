@@ -60,4 +60,5 @@ class ExcelInterface:
         merged_dataframe.to_excel(writer, sheet_name='Sheet1', index=False)
 
         # Save and close
+        print("File save in: " + self.path)
         writer.close()
