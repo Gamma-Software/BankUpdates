@@ -58,8 +58,9 @@ docs/_build/
 target/
 
 
-login.txt
 accounts.xlsx
+
+accounts.hmtl
 
 # Compiled python modules.
 *.pyc
@@ -69,3 +70,8 @@ accounts.xlsx
 
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
+
+/login/bankin_oauth.yml
+
+/login/onedrive_oauth.yml
+account.html
