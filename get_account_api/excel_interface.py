@@ -52,9 +52,9 @@ class ExcelInterface:
         cleaned_data = clean_data(data)
 
         # Read the current dataframe
-        if not self.read_excel_in_pd().empty:
-            current_dataframe = pd.read_excel(self.path, index_col=None)
-            merged_dataframe = pd.merge(current_dataframe, cleaned_data, on='timestamp', how='outer')
+        current_dataframe = self.read_excel_in_pd()
+        if not current_dataframe.empty:
+            merged_dataframe = pd.concat([current_dataframe, cleaned_data])
         else:
             merged_dataframe = cleaned_data
         merged_dataframe.to_excel(writer, sheet_name='Sheet1', index=False)
