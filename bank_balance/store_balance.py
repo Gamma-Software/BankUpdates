@@ -2,7 +2,7 @@ from bank_balance.library.bankininterface import BankinInterface
 from bank_balance.library.excelinterface import ExcelInterface
 from bank_balance.library.onedriveinterface import OnedriveInterface
 import bank_balance.library.parametersparsing as conf
-from bank_balance.library import pathfiles
+import bank_balance.library.pathfiles as pathfiles
 from bank_balance.library.exceptions import PostGetErrors
 from bank_balance.library.log import log
 import getpass
@@ -31,7 +31,7 @@ def store_balance():
                                        bankin_param['client_id'], bankin_param['client_secret'])
 
     # Save the path in temp folder
-    excel_path = path_files.data_temp_file
+    excel_path = pathfiles.data_temp_file
 
     if options['save'] == 'onedrive':
         onedrive_param = conf.parse_onedrive_params(pathfiles.onedrive_oauth)
@@ -43,7 +43,7 @@ def store_balance():
             exit(0)
 
         # Download the file
-        onedrive_interface.download_file(path_files.account_filename, path_files.data_temp_file)
+        onedrive_interface.download_file(pathfiles.account_filename, pathfiles.data_temp_file)
     else:
         if options['local_path'] != 'none':
             excel_path = options['local_path']
@@ -53,7 +53,7 @@ def store_balance():
             if bankin_interface.refresh_items():
                 data = bankin_interface.get_items_balance()  # Get the latest balance of all the bankin accounts
                 bankin_interface.logout()
-                excel_interface = ExcelInterface(excel_path, path_files.account_filename)
+                excel_interface = ExcelInterface(excel_path, pathfiles.account_filename)
                 excel_interface.save_in_excel(data)
 
                 if options['save'] == 'onedrive':
