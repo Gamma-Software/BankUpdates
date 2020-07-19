@@ -60,7 +60,7 @@ def create_folders():
 
     # Options
     options = {'send': 'none', 'save': 'local', 'local_path': 'none'}
-        yaml.dump(options, file)
+    yaml.dump(options, file)
 
 
 def setup_options(option, value):
