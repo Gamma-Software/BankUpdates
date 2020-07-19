@@ -58,7 +58,7 @@ def create_folders():
         yaml.dump(bankin_oauth, file)
 
     # Options
-    options = {'send': 'none', 'save': 'local'}
+    options = {'send': 'none', 'save': 'local', 'local_path': 'none'}
     with open(path_files.setup_options, 'w') as file:
         yaml.dump(options, file)
 
@@ -72,6 +72,15 @@ def setup_options(option, value):
     # Replace the option
     options[option] = value
     log('Set '+option+' to: ' + value)
+
+    # Ask where to save in local
+    if value == 'local':
+        if input('Do you want to change the path ? (current local path: ' + options['local_path'] + ') yes/no: ') \
+                != 'no':
+            path_to_save_local = input('Where do you want to save in local: ')
+            options['local_path'] = path_to_save_local
+            log('Set local_path to: ' + path_to_save_local)
+        print(options)
 
     # Save the option in the corresponding yaml
     with open(path_files.setup_options, 'w') as file:
