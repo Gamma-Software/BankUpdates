@@ -7,6 +7,7 @@ from bank_balance.library.exceptions import PostGetErrors
 from bank_balance.library.log import log
 import getpass
 import os
+import time
 
 
 def store_balance():
@@ -48,20 +49,22 @@ def store_balance():
         if options['local_path'] != 'none':
             excel_path = options['local_path']
 
-    try:
-        if bankin_interface.authenticate():
-            if bankin_interface.refresh_items():
-                data = bankin_interface.get_items_balance()  # Get the latest balance of all the bankin accounts
-                bankin_interface.logout()
-                excel_interface = ExcelInterface(excel_path, pathfiles.account_filename)
-                excel_interface.save_in_excel(data)
+    while True:  # Endless loop
+        try:
+            if bankin_interface.authenticate():
+                if bankin_interface.refresh_items():
+                    data = bankin_interface.get_items_balance()  # Get the latest balance of all the bankin accounts
+                    bankin_interface.logout()
+                    excel_interface = ExcelInterface(excel_path, pathfiles.account_filename)
+                    excel_interface.save_in_excel(data)
 
-                if options['save'] == 'onedrive':
-                    onedrive_interface.upload_file(pathfiles.account_filename, pathfiles.data_temp_file)
-                if options['send'] == 'email':
-                    print('wip')
-    except PostGetErrors as error:
-        print('error: ' + error.message)
+                    if options['save'] == 'onedrive':
+                        onedrive_interface.upload_file(pathfiles.account_filename, pathfiles.data_temp_file)
+                    if options['send'] == 'email':
+                        print('wip')
+        except PostGetErrors as error:
+            print('error: ' + error.message)
+        time.sleep(60*10)  # Every 10 min
 
 
 if __name__ == '__main__':
