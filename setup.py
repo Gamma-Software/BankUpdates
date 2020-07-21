@@ -17,7 +17,7 @@ def get_dependencies():
 
 setuptools.setup(
     name='get-account',
-    version='2.0.2',
+    version='2.1.0',
     author='Valentin Rudloff',
     author_email='valentin.rudloff.perso@gmail.com',
     description='A python package to retrieve your bankin account balances, store them periodically and display '
