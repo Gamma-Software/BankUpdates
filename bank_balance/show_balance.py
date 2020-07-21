@@ -3,7 +3,6 @@ import plotly
 import plotly.graph_objects as go
 from bank_balance.library.excelinterface import ExcelInterface
 from bank_balance.library import pathfiles
-from scipy.signal import find_peaks
 
 
 def plot(df: pd.DataFrame, options):
@@ -29,24 +28,12 @@ def plot(df: pd.DataFrame, options):
                        line=dict(color="rgb(0, 143, 213)", width=3, dash="dot"),
                        marker=dict(size=8),
                        visible=True if i == 1 else False))
-        fig.add_trace(
-            go.Scatter(
-                x=[df['timestamp'][j] for j in find_peaks(df.iloc[:, i])[0]],
-                y=[df.iloc[:, i][j] for j in find_peaks(df.iloc[:, i])[0]],
-                mode='markers',
-                marker=dict(
-                    size=8,
-                    color='red',
-                    symbol='cross'
-                ),
-                name='Detected Peaks',
-                visible=True if i == 1 else False))
 
         # Add button settings
         button_list.append(
             dict(label=name,
                  method="update",
-                 args=[{"visible": [[o == i, o == i][1:-1] for o in range(1, nb_items*2, 1)]},
+                 args=[{"visible": [o == i for o in range(nb_items)]},
                        {"title": "<b>"+name+"</b>",
                         "annotations": []}]))
 
@@ -92,12 +79,13 @@ def plot(df: pd.DataFrame, options):
 
 
 def show_balance():
+    print(pathfiles.data_temp_file)
     excel_interface = ExcelInterface(pathfiles.data_temp_file, pathfiles.account_filename)
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
     if not accounts.empty:
-        plot(accounts, {'line_shape': 'spline', 'color': 'rgb(0, 143, 213)'})
+        plot(accounts, {'line_shape': 'linear', 'color': 'rgb(0, 143, 213)'})
 
 
 if __name__ == "__main__":
