@@ -10,7 +10,9 @@ import yaml
 import argparse
 
 
-def init(parser):
+def init():
+    parser = argparse.ArgumentParser()
+
     # If not created create the folders
     create_folders()
 
@@ -135,5 +137,4 @@ def setup_bankin():
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    init(parser)
+    init()
