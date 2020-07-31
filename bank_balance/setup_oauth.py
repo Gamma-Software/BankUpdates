@@ -10,7 +10,9 @@ import yaml
 import argparse
 
 
-def init(parser):
+def init():
+    parser = argparse.ArgumentParser()
+
     # If not created create the folders
     create_folders()
 
@@ -59,8 +61,9 @@ def create_folders():
         yaml.dump(bankin_oauth, file)
 
     # Options
-    options = {'send': 'none', 'save': 'local', 'local_path': 'none'}
-    yaml.dump(options, file)
+    options = {'send': 'none', 'save': 'local', 'local_path': pathfiles.data_temp_file}
+    with open(pathfiles.setup_options, 'w') as file:
+        yaml.dump(options, file)
 
 
 def setup_options(option, value):
@@ -135,5 +138,4 @@ def setup_bankin():
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    init(parser)
+    init()

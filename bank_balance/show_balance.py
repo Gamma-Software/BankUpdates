@@ -75,6 +75,7 @@ def plot(df: pd.DataFrame, options):
             ])
         )
     )
+    fig.show()
     plotly.offline.plot(fig, filename='../account.html')
 
 
