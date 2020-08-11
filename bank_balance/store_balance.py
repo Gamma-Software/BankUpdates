@@ -31,7 +31,7 @@ def store_balance():
                                        bankin_param['client_id'], bankin_param['client_secret'])
 
     # Save the path in temp folder
-    excel_path = pathfiles.data_temp_file
+    excel_path = pathfiles.temp_folder
 
     if options['save'] == 'onedrive':
         onedrive_param = conf.parse_onedrive_params(pathfiles.onedrive_oauth)
@@ -43,7 +43,7 @@ def store_balance():
             exit(0)
 
         # Download the file
-        onedrive_interface.download_file(pathfiles.account_filename, pathfiles.data_temp_file)
+        onedrive_interface.download_file(pathfiles.account_filename, pathfiles.temp_folder)
     else:
         if options['local_path'] != 'none':
             excel_path = options['local_path']
@@ -57,7 +57,7 @@ def store_balance():
                 excel_interface.save_in_excel(data)
 
                 if options['save'] == 'onedrive':
-                    onedrive_interface.upload_file(pathfiles.account_filename, pathfiles.data_temp_file)
+                    onedrive_interface.upload_file(pathfiles.account_filename, pathfiles.temp_folder)
                 if options['send'] == 'email':
                     print('wip')
     except PostGetErrors as error:
