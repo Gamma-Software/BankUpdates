@@ -3,6 +3,7 @@ import plotly
 import plotly.graph_objects as go
 from bank_balance.library.excelinterface import ExcelInterface
 from bank_balance.library import pathfiles
+import os
 
 
 def plot(df: pd.DataFrame, options):
@@ -76,12 +77,12 @@ def plot(df: pd.DataFrame, options):
         )
     )
     fig.show()
-    plotly.offline.plot(fig, filename='../account.html')
+    plotly.offline.plot(fig, filename=os.path.join(pathfiles.temp_folder, 'account.html'))
 
 
 def show_balance():
     print(pathfiles.data_temp_file)
-    excel_interface = ExcelInterface(pathfiles.data_temp_file, pathfiles.account_filename)
+    excel_interface = ExcelInterface(pathfiles.data_temp_file, os.path.join(pathfiles.temp_folder, 'account.xlsx'))
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
