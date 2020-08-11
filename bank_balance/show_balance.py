@@ -2,6 +2,7 @@ import pandas as pd
 import plotly
 import plotly.graph_objects as go
 from bank_balance.library.excelinterface import ExcelInterface
+import bank_balance.library.parametersparsing as conf
 from bank_balance.library import pathfiles
 import os
 
@@ -77,11 +78,23 @@ def plot(df: pd.DataFrame, options):
         )
     )
     fig.show()
-    plotly.offline.plot(fig, filename=os.path.join(pathfiles.temp_folder, 'account.html'))
+
+    options = conf.parse_setup_options(pathfiles.setup_options)
+    path = pathfiles.temp_folder
+    if options['save'] == 'local':
+        if options['local_path'] != 'none':
+            path = options['local_path']
+    plotly.offline.plot(fig, filename=os.path.join(path, 'account.html'))
 
 
 def show_balance():
-    excel_interface = ExcelInterface(pathfiles.temp_folder, pathfiles.account_filename)
+    # Read options
+    options = conf.parse_setup_options(pathfiles.setup_options)
+    path = pathfiles.temp_folder
+    if options['save'] == 'local':
+        if options['local_path'] != 'none':
+            path = options['local_path']
+    excel_interface = ExcelInterface(path, pathfiles.account_filename)
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
