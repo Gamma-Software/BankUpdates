@@ -61,7 +61,7 @@ def create_folders():
         yaml.dump(bankin_oauth, file)
 
     # Options
-    options = {'send': 'none', 'save': 'local', 'local_path': pathfiles.data_temp_file}
+    options = {'send': 'none', 'save': 'local', 'local_path': pathfiles.temp_folder}
     with open(pathfiles.setup_options, 'w') as file:
         yaml.dump(options, file)
 
