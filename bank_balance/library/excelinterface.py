@@ -1,5 +1,5 @@
 import pandas as pd
-from os import path
+import os
 
 
 def clean_data(data):
@@ -39,12 +39,12 @@ class ExcelInterface:
     def read_excel_in_pd(self):
         """ Read the current dataframe"""
         current_dataframe = pd.DataFrame()
-        if path.exists(self.path):
-            current_dataframe = pd.read_excel(self.path, index_col=None)
+        if os.path.exists(os.path.join(self.path, self.file_name)):
+            current_dataframe = pd.read_excel(os.path.join(self.path, self.file_name), index_col=None)
         return current_dataframe
 
     def save_in_excel(self, data):
-        writer = pd.ExcelWriter(self.path, engine='xlsxwriter',
+        writer = pd.ExcelWriter(os.path.join(self.path, self.file_name), engine='xlsxwriter',
                                 datetime_format='mmm d yyyy hh:mm:ss',
                                 date_format='mmmm dd yyyy')
 
