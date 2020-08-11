@@ -25,7 +25,7 @@ def store_balance():
 
     # Get the password in the console
     password = getpass.getpass('Type your bankin password: ')
-    
+
     # Use the Bankin interface to login, refresh the balance, save it in an excel file, logout
     bankin_interface = BankinInterface(bankin_param['email'], password,
                                        bankin_param['client_id'], bankin_param['client_secret'])
