@@ -82,7 +82,7 @@ def plot(df: pd.DataFrame, options):
 
 def show_balance():
     print(pathfiles.data_temp_file)
-    excel_interface = ExcelInterface(pathfiles.temp_folder, 'account.xlsx')
+    excel_interface = ExcelInterface(pathfiles.temp_folder, pathfiles.account_filename)
 
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
