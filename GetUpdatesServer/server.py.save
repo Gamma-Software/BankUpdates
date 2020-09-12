@@ -1,0 +1,8 @@
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def show_balance():
+index    return render_template('account.html')

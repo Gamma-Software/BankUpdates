@@ -25,7 +25,7 @@ class BankinInterface:
             'client-id': client_id,
             'client-secret': client_secret
         }
-        self.timeout = 20
+        self.timeout = 120
         self.item = {}
 
     def authenticate(self):

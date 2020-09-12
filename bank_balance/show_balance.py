@@ -29,6 +29,7 @@ def plot(df: pd.DataFrame, options):
                        line_shape=options['line_shape'],
                        line=dict(color="rgb(0, 143, 213)", width=3, dash="dot"),
                        marker=dict(size=8),
+                       y_range=(0, df.iloc[:, i]),
                        visible=True if i == 1 else False))
 
         # Add button settings
@@ -85,7 +86,7 @@ def plot(df: pd.DataFrame, options):
         if options['local_path'] != 'none':
             path = options['local_path']
     plotly.offline.plot(fig, filename=os.path.join(path, 'account.html'))
-
+    print('save in ' + os.path.join(path, 'account.html'))
 
 def show_balance():
     # Read options
@@ -94,13 +95,15 @@ def show_balance():
     if options['save'] == 'local':
         if options['local_path'] != 'none':
             path = options['local_path']
+    print('1')
     excel_interface = ExcelInterface(path, pathfiles.account_filename)
-
+    print('2')
     # execute only if run as a script
     accounts = excel_interface.read_excel_in_pd()
     if not accounts.empty:
         plot(accounts, {'line_shape': 'linear', 'color': 'rgb(0, 143, 213)'})
-
+    else:
+        print('nothing to plot')
 
 if __name__ == "__main__":
     show_balance()
