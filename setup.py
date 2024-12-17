@@ -22,7 +22,7 @@ setuptools.setup(
     author_email='valentin.rudloff.perso@gmail.com',
     description='A python package to retrieve your bankin account balances, store them periodically and display '
                 'them in a beautiful graph',
-    url='https://github.com/Gamma-Software/GetUpdates',
+    url='https://github.com/Gamma-Software/BankUpdates',
     packages=setuptools.find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
